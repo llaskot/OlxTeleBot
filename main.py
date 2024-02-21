@@ -3,13 +3,13 @@
 import time
 
 import bs4
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-URL = 'https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/kharkov/?currency=UAH&search%5Border%5D=created_at:desc&view=list'
+URL = 'https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/nikolaev_106/?currency=UAH&search%5Bfilter_enum_number_of_rooms_string%5D%5B0%5D=odnokomnatnye&search%5Bfilter_enum_number_of_rooms_string%5D%5B1%5D=dvuhkomnatnye&search%5Bfilter_enum_number_of_rooms_string%5D%5B2%5D=trehkomnatnye&search%5Bfilter_float_price%3Afrom%5D=1500&search%5Bfilter_float_price%3Ato%5D=5000&search%5Border%5D=created_at%3Adesc&view=list'
 
 
 def parse(url):
@@ -33,19 +33,31 @@ def parse(url):
     return page_content
 
 
-def assembl(adver: bs4.element.Tag) -> dict:
+# def check_number(number:)
+
+def assembl(adver) -> dict:
+
     return {'info': adver.find('h6').getText(),
             'location_date': adver.find('p', attrs={'data-testid': "location-date"}).getText(),
             'price': adver.find('p', attrs={'data-testid': "ad-price"}).getText(),
             'square': adver.find('span').getText(),
             'link': f"https://www.olx.ua{adver.find('a', href=True).get('href')}",
-            'foto': adver.find('img').get('src')
+            'foto': adver.find('img').get('src'),
+            'paid': False if adver.find('div', attrs={'data-testid': 'adCard-featured'}) is None else True
             }
 
 
 if __name__ == '__main__':
     soup = BeautifulSoup(parse(URL), 'html.parser')
-    adv: list[bs4.element.Tag] = soup.find_all("div", attrs={"data-cy": "l-card"})
+
+    further = soup.find('p', string='Подивіться результати для більшої відстані:')
+    # print('further = ', further)
+    adv = []
+    if further is None:
+        adv = soup.find_all("div", attrs={"data-cy": "l-card"})
+    else:
+        adv = further.find_all_previous("div", attrs={"data-cy": "l-card"})
+        adv.reverse()
     content: list[{}] = [assembl(ad) for ad in adv]
     for i in content:
         for j in i:

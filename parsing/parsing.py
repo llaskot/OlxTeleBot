@@ -1,12 +1,12 @@
 # from bot.user_data import UserData
+import re
+
 import bs4
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
-# URL = 'https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir/kharkov/?currency=UAH&search%5Border%5D=created_at:desc&view=list'
-URL = 'https://www.olx.ua/uk/nedvizhimost/kvartiry/dolgosrochnaya-arenda-kvartir//?currency=UAH&search%5Border%5D=created_at:desc&view=list'
 
 cities_ru = ["Харьков", "Киев", "Львов", "Винница", "Днепр", "Житомир", "Запорожье", "Ивано-Франковск",
              "Кропивницкий", "Луцк", "Николаев", "Одесса", "Полтава", "Ровно", "Сумы", "Тернополь", "Ужгород",
@@ -70,7 +70,7 @@ class Parser:
     def parse(self, url):
         options = webdriver.ChromeOptions()
         options.add_argument("--window-size=1600,1024")
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
 
         driver = webdriver.Chrome(options=options)
         driver.implicitly_wait(5)
@@ -88,8 +88,8 @@ class Parser:
 
     def assembl(self, adver: bs4.element.Tag) -> dict:
         return {'info': adver.find('h6').getText(),
-                'location_date': adver.find('p', attrs={'data-testid': "location-date"}).getText(),
-                'price': adver.find('p', attrs={'data-testid': "ad-price"}).getText(),
+                'location_date': adver.find('p', attrs={'data-testid': 'location-date'}).getText(),
+                'price': adver.find('p', attrs={'data-testid': 'ad-price'}).getText(),
                 'square': adver.find('span').getText(),
                 'link': f"https://www.olx.ua{adver.find('a', href=True).get('href')}",
                 'foto': adver.find('img').get('src')
@@ -99,14 +99,16 @@ class Parser:
         url = self.get_url()
         print(url)
         soup = BeautifulSoup(self.parse(url), 'html.parser')
-        adv: list[bs4.element.Tag] = soup.find_all("div", attrs={"data-cy": "l-card"})
+
+        advertisements_qty = soup.find('span', attrs={'data-testid': 'total-count'}).getText()
+        digits = re.findall(r'\d', advertisements_qty)
+        res = int(''.join(digits))
+        print('advertisements_qty = ', res)
+
+        adv: list[bs4.element.Tag] = soup.find_all('div', attrs={'data-cy': 'l-card'})
         content: list[{}] = [self.assembl(ad) for ad in adv]
-        # for i in content:
-        #     for j in i:
-        #         print(j, i[j])
-        #     print(' ')
-        print(content[4])
-        return content[4]
+        # print(content[4])
+        return res, content
 
 # if __name__ == '__main__':
 #     min_rooms = 2
