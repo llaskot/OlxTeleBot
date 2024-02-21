@@ -92,7 +92,8 @@ class Parser:
                 'price': adver.find('p', attrs={'data-testid': 'ad-price'}).getText(),
                 'square': adver.find('span').getText(),
                 'link': f"https://www.olx.ua{adver.find('a', href=True).get('href')}",
-                'foto': adver.find('img').get('src')
+                'foto': adver.find('img').get('src'),
+                'paid': False if adver.find('div', attrs={'data-testid': 'adCard-featured'}) is None else True
                 }
 
     def get_advertising(self):
@@ -100,13 +101,29 @@ class Parser:
         print(url)
         soup = BeautifulSoup(self.parse(url), 'html.parser')
 
+
+
         advertisements_qty = soup.find('span', attrs={'data-testid': 'total-count'}).getText()
         digits = re.findall(r'\d', advertisements_qty)
         res = int(''.join(digits))
         print('advertisements_qty = ', res)
 
-        adv: list[bs4.element.Tag] = soup.find_all('div', attrs={'data-cy': 'l-card'})
+        further = soup.find('p', string='Подивіться результати для більшої відстані:')
+        # print('further = ', further)
+        adv = []
+        if further is None:
+            adv = soup.find_all("div", attrs={"data-cy": "l-card"})
+        else:
+            adv = further.find_all_previous("div", attrs={"data-cy": "l-card"})
+            adv.reverse()
         content: list[{}] = [self.assembl(ad) for ad in adv]
+
+
+
+
+
+        # adv: list[bs4.element.Tag] = soup.find_all('div', attrs={'data-cy': 'l-card'})
+        # content: list[{}] = [self.assembl(ad) for ad in adv]
         # print(content[4])
         return res, content
 

@@ -161,16 +161,29 @@ def max_price(message):
 
 @bot.callback_query_handler(func=lambda call: users[call.from_user.id].state == 'min_ready')
 def get_adv(call):
-    user = users[call.from_user.id]
-    bot.send_message(call.message.chat.id, f"Идет поиск...")
-    parser = Parser(user)
-    qty, advertising = parser.get_advertising()
-    if qty == 0:
-        bot.send_message(call.message.chat.id, 'По вашему запросу найдено 0 объявлений\nПопробуйе внести другие параметры поиска')
-    else:
-        bot.send_message(call.message.chat.id,
-                         f'По вашему запросу найдено {qty} объявлений\nПоказаны самые новые. Продвигаемые объявления не скрыты.')
-        adv_messages(advertising, call.message.chat.id)
+    print(call)
+    if call.data == 'get_adv':
+        user = users[call.from_user.id]
+        user.state = None
+        bot.send_message(call.message.chat.id, f"Идет поиск...")
+        parser = Parser(user)
+        qty, advertising = parser.get_advertising()
+        if qty == 0:
+            bot.send_message(call.message.chat.id, 'По вашему запросу найдено 0 объявлений\nПопробуйе внести другие параметры поиска')
+        else:
+            bot.send_message(call.message.chat.id,
+                             f'По вашему запросу найдено {qty} объявлений\nПоказаны самые новые. Продвигаемые объявления не скрыты.')
+            adv_messages(advertising, call.message.chat.id)
+    elif call.data == 'additional_params':
+        markup = ready_btns()
+        bot.send_message(call.message.chat.id, "Sorry! Developing is in progress yet.", reply_markup=markup)
+
+
+
+# @bot.callback_query_handler(func=lambda call: users[call.from_user.id].state == 'min_ready')
+# def set_additional_params(call):
+#     if call.data == 'additional_params':
+#         bot.send_message(call.message.chat.id, "Sorry! Developing is in progress yet.")
 
 
 
@@ -179,7 +192,9 @@ def adv_messages(resp: list[{}], c_id):
         # print(adv)
         pic = f'{adv['location_date']} <a href="{adv['foto']}">&#8205;</a>'
         text_link = f'<a href="{adv['link']}">{adv['info']}</a>'
-        bot.send_message(c_id, pic + f'\nЦена: {adv['price']}     Площадь: {adv['square']}\n{text_link}',
+        paid = '<b>Продвигается</b>' if adv['paid'] else ''
+        bot.send_message(c_id, pic + f'\nЦена: {adv['price']}     Площадь: {adv['square']}'
+                                     f'        {paid}\n{text_link}',
                          parse_mode='HTML')
 
 
@@ -189,6 +204,7 @@ def ready_btns():
     additional_params = types.InlineKeyboardButton('Доп. параметры', callback_data="additional_params")
     markup.add(searching, additional_params)
     return markup
+
 
 
 bot.infinity_polling()
