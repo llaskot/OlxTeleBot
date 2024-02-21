@@ -28,7 +28,8 @@ def parse(url):
 
     page = driver.find_element(By.TAG_NAME, 'html')
     page_content = f'<html>{page.get_attribute("innerHTML")}</html>'
-    # driver.close()
+    driver.close()
+    driver.quit()
     # time.sleep(30)
     return page_content
 

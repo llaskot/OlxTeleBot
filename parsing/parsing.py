@@ -84,6 +84,8 @@ class Parser:
         page = driver.find_element(By.TAG_NAME, 'html')
         page_content = f'<html>{page.get_attribute("innerHTML")}</html>'
         # time.sleep(30)
+        driver.close()
+        driver.quit()
         return page_content
 
     def assembl(self, adver: bs4.element.Tag) -> dict:
