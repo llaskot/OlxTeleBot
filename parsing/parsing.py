@@ -7,7 +7,6 @@ from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
-
 cities_ru = ["Харьков", "Киев", "Львов", "Винница", "Днепр", "Житомир", "Запорожье", "Ивано-Франковск",
              "Кропивницкий", "Луцк", "Николаев", "Одесса", "Полтава", "Ровно", "Сумы", "Тернополь", "Ужгород",
              "Херсон", "Черкассы", "Хмельницкий", "Чернигов", "Черновцы"]
@@ -102,54 +101,19 @@ class Parser:
         url = self.get_url()
         print(url)
         soup = BeautifulSoup(self.parse(url), 'html.parser')
-
-
-
         advertisements_qty = soup.find('span', attrs={'data-testid': 'total-count'}).getText()
         digits = re.findall(r'\d', advertisements_qty)
         res = int(''.join(digits))
-        print('advertisements_qty = ', res)
-
+        # print('advertisements_qty = ', res)
         further = soup.find('p', string='Подивіться результати для більшої відстані:')
-        # print('further = ', further)
-        adv = []
         if further is None:
             adv = soup.find_all("div", attrs={"data-cy": "l-card"})
         else:
             adv = further.find_all_previous("div", attrs={"data-cy": "l-card"})
             adv.reverse()
         content: list[{}] = [self.assembl(ad) for ad in adv]
-
-
-
-
-
-        # adv: list[bs4.element.Tag] = soup.find_all('div', attrs={'data-cy': 'l-card'})
-        # content: list[{}] = [self.assembl(ad) for ad in adv]
-        # print(content[4])
         return res, content
 
 # if __name__ == '__main__':
 #     min_rooms = 2
-#     max_rooms = 5
-#
-#
-#
-#     def get_rooms():
-#         print(rooms[min_rooms])
-#         if min_rooms == max_rooms:
-#             print(rooms[min_rooms])
-#             return rooms[min_rooms]
-#
-#         else:
-#             all_rooms : str = ''
-#             for i, num in enumerate(range(min_rooms, max_rooms)):
-#                 all_rooms += rooms[num].replace('enum_number_of_rooms_string%5D%5B0%5D'
-#                                               , f'enum_number_of_rooms_string%5D%5B{i}%5D')
-#                 print('i = ', i)
-#                 print('num = ', num)
-#                 print('all_rooms = ', all_rooms )
-#
-#             return all_rooms
-#
-#     get_rooms()
+
