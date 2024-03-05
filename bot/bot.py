@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 
 from parsing.parsing import Parser, cities_ru
-from user_data import UserData
+from .user_data import UserData
 
 bot = telebot.TeleBot('6924846054:AAF56WNwKipFUs9wTakgLm_JK36514tVUEE')
 
@@ -194,6 +194,15 @@ def ready_btns():
     return markup
 
 
-bot.infinity_polling()
+# bot.infinity_polling()
+
+def start_bot():
+    try:
+        # ваш код инициализации бота и другие настройки
+        bot.infinity_polling()
+    except Exception as e:
+        print(f"Ошибка: {e}")
 
 
+# if __name__ == "__main__":
+#     start_bot()
