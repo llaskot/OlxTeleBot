@@ -178,7 +178,7 @@ def get_adv(call):
 def adv_messages(resp: list[{}], c_id):
     for adv in resp:
         # print(adv)
-        pic = f'{adv['location_date']} <a href="{adv['foto']}">&#8205;</a>'
+        pic = f'{adv["location_date"]} <a href="{adv["foto"]}">&#8205;</a>'
         text_link = f'<a href="{adv['link']}">{adv['info']}</a>'
         paid = '<b>Продвигается</b>' if adv['paid'] else ''
         bot.send_message(c_id, pic + f'\nЦена: {adv['price']}     Площадь: {adv['square']}'
