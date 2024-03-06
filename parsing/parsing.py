@@ -69,7 +69,7 @@ class Parser:
     def parse(self, url):
         options = webdriver.ChromeOptions()
         options.add_argument("--window-size=1600,1024")
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
 
         driver = webdriver.Chrome(options=options)
         driver.implicitly_wait(5)
