@@ -1,4 +1,4 @@
-It works from time to time here @olx_cat_bot
+It works from 09.00 to 23.00 here @olx_cat_bot (https://t.me/olx_cat_bot)
 
 Install Google Chrome on the linux server:
 
