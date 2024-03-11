@@ -4,7 +4,9 @@ from telebot import types
 from parsing.parsing import Parser, cities_ru
 from .user_data import UserData
 
-bot = telebot.TeleBot('6924846054:AAF56WNwKipFUs9wTakgLm_JK36514tVUEE')
+# bot = telebot.TeleBot('6924846054:AAF56WNwKipFUs9wTakgLm_JK36514tVUEE')
+bot = telebot.TeleBot('7100167237:AAF4vpUuZtG7dvrg8s4xvmM-OhE2-R0CyC4')
+
 
 ukrainian_cities = cities_ru
 
@@ -150,12 +152,12 @@ def max_price(message):
                          , parse_mode='HTML')
         bot.send_message(message.chat.id, 'Нажмите "Искать" или добавьте дополнительные параметры',
                          reply_markup=ready_btn)
-    print(users)
+    # print(users)
 
 
 @bot.callback_query_handler(func=lambda call: users[call.from_user.id].state == 'min_ready')
-def get_adv(call):
-    print(call)
+def get_adv(call:telebot.types.CallbackQuery):
+    print(call.from_user.username)
     if call.data == 'get_adv':
         user = users[call.from_user.id]
         user.state = None
