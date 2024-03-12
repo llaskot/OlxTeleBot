@@ -1,8 +1,9 @@
-version: "3"
+version: "3.5"
 
 services:
   chrome:
     image: selenium/node-chrome
+    container_name: chrome
     shm_size: 3gb
     depends_on:
       - selenium-hub
@@ -24,15 +25,16 @@ services:
       - "4442:4442"
       - "4443:4443"
       - "4444:4444"
-   
+
     logging:
       driver: local
 
 
   olx:
+    container_name: app
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - /home/konst/olx/OlxTeleBot:/app/code
+      - .:/app/code
     network_mode: host
