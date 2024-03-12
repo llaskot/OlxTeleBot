@@ -1,4 +1,5 @@
-version: "3.5"
+version: "3"
+
 services:
   chrome:
     image: selenium/node-chrome
@@ -13,6 +14,8 @@ services:
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
       - SE_VNC_NO_PASSWORD= true
 
+    logging:
+      driver: local
 
   selenium-hub:
     image: selenium/hub
@@ -21,3 +24,15 @@ services:
       - "4442:4442"
       - "4443:4443"
       - "4444:4444"
+   
+    logging:
+      driver: local
+
+
+  olx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /home/konst/olx/OlxTeleBot:/app/code
+    network_mode: host
