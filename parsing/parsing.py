@@ -67,7 +67,7 @@ class Parser:
             f'&search%5Border%5D=created_at:desc&{self.get_price()}{self.get_rooms()}view=list')
 
     def parse(self, url):
-        docker_selenium_server = 'http://192.168.0.2:4444/wd/hub'
+        docker_selenium_server = 'http://192.168.0.2:4444'
         options = webdriver.ChromeOptions()
         options.add_argument("--window-size=1600,1024")
         options.add_argument("--headless")
