@@ -1,2 +1,2 @@
 credentials/creds.py export-ignore
-credentials/* merge=ours
+credentials/creds.py merge=ours
