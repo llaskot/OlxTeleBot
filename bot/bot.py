@@ -3,8 +3,9 @@ from telebot import types
 
 from parsing.parsing import Parser, cities_ru
 from .user_data import UserData
+from credentials.creds import token
 
-bot = telebot.TeleBot('6924846054:AAF56WNwKipFUs9wTakgLm_JK36514tVUEE')
+bot = telebot.TeleBot(token)
 
 ukrainian_cities = cities_ru
 
