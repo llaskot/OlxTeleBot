@@ -3,7 +3,7 @@ from telebot import types
 
 from parsing.parsing import Parser, cities_ru
 from .user_data import UserData
-from creds import token
+from credentials.creds import token
 
 bot = telebot.TeleBot(token)
 
