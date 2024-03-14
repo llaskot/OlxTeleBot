@@ -1,2 +1,0 @@
-credentials/creds.py export-ignore
-credentials/creds.py merge=ours
