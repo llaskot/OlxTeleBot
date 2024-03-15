@@ -1,2 +1,0 @@
-## token = '6924846054:AAF56WNwKipFUs9wTakgLm_JK36514tVUEE'
-token = '7100167237:AAF4vpUuZtG7dvrg8s4xvmM-OhE2-R0CyC4'
