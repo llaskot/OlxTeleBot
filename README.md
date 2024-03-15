@@ -1,15 +1,20 @@
 It works from 09.00 to 23.00 here @olx_cat_bot (https://t.me/olx_cat_bot)
 
-Install Google Chrome on the linux server:
+Install on the linux server:
 
-start virtual environment (at my server it's  source myproject/OlxTeleBot/venv/bin/activate)
+clone repository
 
-run:
+cd to the project directory
 
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+create file "creds.py" with a single row:     token = 'your telegram bot token'
 
-sudo dpkg -i google-chrome-stable_current_amd64.deb
-
-sudo apt-get install -f
-
+create and setup a virtual environment:
+1. python3 -m venv venv
+2. source venv/bin/activate
+3. pip install - r requirements.txt
+4. wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+5. sudo dpkg -i google-chrome-stable_current_amd64.deb
+6. sudo apt-get install -
+   
+start app: python3 main.py
 
